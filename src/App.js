@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef } from "react";
 import Search from "./Search";
 import Weather from "./Weather";
 import Error from "./Error";
+import { Ring } from "@uiball/loaders";
 
 function App() {
   function reducer(state, action) {
@@ -20,7 +21,7 @@ function App() {
   const initialState = {
     city: "",
     weather: null,
-    status: "",
+    status: "loading",
     errorMessage: "",
   };
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -64,10 +65,8 @@ function App() {
   return (
     <main className="app">
       <Search inputEl={inputEl} city={city} dispatch={dispatch} />
-      {status === "loading" && <p>Loading...</p>}
-      {status === "ready" && weather && weather.cod !== "400" && (
-        <Weather weather={weather} />
-      )}
+      {status === "loading" && city.length > 0 && <Ring color="white" />}
+      {status === "ready" && weather && <Weather weather={weather} />}
       {status === "error" && city.length > 0 && (
         <Error message={errorMessage} />
       )}
